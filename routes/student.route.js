@@ -5,9 +5,12 @@ let validation = require('../middlewares/validations/student.validation')
 
 student.route('/')
     .get(controller.retrieveAll)
-    .post(validation.create, controller.create)
+    .post(validation.body, controller.create)
 
-student.get('/:name', controller.retrieveByName)
+student.route('/:name')
+    .get(controller.retrieveByName)
+    .put(validation.body, controller.update)
+    .delete(controller.delete)
 
 student.get('/test/error', controller.getError)
 

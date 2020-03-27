@@ -37,30 +37,30 @@ app.get('/connection/db', async (req, res, next) => {
 
 database.connect().then(result => {
     console.log(result);
-})
 
-app.use('/student', student)
+    app.use('/student', student)
 
-app.use(express.static('public'))
+    app.use(express.static('public'))
 
-app.use((req, res, next) => {
-    res.status(404).json({
-        status: "Error",
-        message: "Method not found"
+    app.use((req, res, next) => {
+        res.status(404).json({
+            status: "Error",
+            message: "Method not found"
+        })
     })
-})
 
-app.use((err, req, res, next) => {
-    console.log(err);
-    res.status(500).json({
-        status: "Error",
-        message: "Internal Server Error"
+    app.use((err, req, res, next) => {
+        console.log(err);
+        res.status(500).json({
+            status: "Error",
+            message: "Internal Server Error"
+        })
     })
-})
 
-const HOST = process.env.HOST || "localhost",
-    PORT = process.env.PORT || 3000
+    const HOST = process.env.HOST || "localhost",
+        PORT = process.env.PORT || 3000
 
-app.listen(PORT, HOST, () => {
-    console.info(`Server live on http://${HOST}:${PORT}`)
+    app.listen(PORT, HOST, () => {
+        console.info(`Server live on http://${HOST}:${PORT}`)
+    })
 })
