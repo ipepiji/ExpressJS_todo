@@ -3,8 +3,8 @@ require('dotenv').config({ path: __dirname + '/.env' })
 let express = require('express')
 let app = express()
 let student = require('./routes/student.route')
-let lecturer = require('./routes/lecturer.route')
 let bodyParser = require('body-parser')
+let database = require('./config/db.connection')
 
 app.use(bodyParser.json())
 
@@ -20,8 +20,26 @@ app.get('/', (req, res, next) => {
     })
 })
 
+app.get('/connection/db', async (req, res, next) => {
+    let conn = await database.connect()
+
+    if (conn === "Database connected")
+        res.status(200).json({
+            status: "Success",
+            message: "Database Connection Check, OK!"
+        })
+    else
+        res.status(500).json({
+            status: "Error",
+            message: "Database Connection Check, Fail!"
+        })
+})
+
+database.connect().then(result => {
+    console.log(result);
+})
+
 app.use('/student', student)
-app.use('/lecturer', lecturer)
 
 app.use(express.static('public'))
 
@@ -33,11 +51,10 @@ app.use((req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
-    const MSG = err.Error || "Internal server error"
-
+    console.log(err);
     res.status(500).json({
         status: "Error",
-        message: MSG
+        message: "Internal Server Error"
     })
 })
 
